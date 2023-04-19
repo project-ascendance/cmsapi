@@ -15,12 +15,12 @@
 		</div>
 
 		<script>
-			const rangeSize = 2;
+			const rangeSize = 3;
 			let rangeStart = 0;
 			let rangeEnd = rangeStart + rangeSize;
 			let range = "" + rangeStart + "-" + rangeEnd;
 			let jsonContent = null;
-			const userAction = async (range) => 
+			const getNewsFromAPI = async (range) =>
 			{
 				const response = await fetch('http://127.0.0.1:3000/news_articles?range=' + range);
 				jsonContent = await response.json(); //extract JSON from the http response
@@ -33,16 +33,16 @@
 				rangeStart = rangeStart + rangeSize;
 				rangeEnd = rangeEnd + rangeSize;
 				range = ""+rangeStart + "-" + rangeEnd;
-				userAction(range).then(refreshContent);
+				getNewsFromAPI(range).then(refreshContent);
 			}
 			
 			function prevFunc()
 			{
 				if (rangeStart > 0) {
-					rangeStart = rangeStart - rangeSize;
+					rangeStart = rangeStart - (rangeSize);
 					rangeEnd = rangeEnd - rangeSize;
 					range = "" + rangeStart + "-" + rangeEnd;
-					userAction(range).then(refreshContent);
+					getNewsFromAPI(range).then(refreshContent);
 				}
 				
 			}
@@ -58,7 +58,7 @@
 				)
 				content.innerHTML = newsHtml;
 			}
-			userAction(range).then(refreshContent);
+			getNewsFromAPI(range).then(refreshContent);
 		</script>
 	</body>
 </html>
