@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+	<head>
+		<title>News</title>
+		<meta name="description" content="CMS test page">
+		<meta name="keywords" content="html cmstest">
+	</head>
+	<body>
+		<h1>News</h1>
+		<div>
+			<button id="prev">Previous</body>
+			<button id="next">Next</body>
+		</div>
+		<div id="news-list">
+		</div>
+
+		<script>
+			const rangeSize = 2;
+			let rangeStart = 0;
+			let rangeEnd = rangeStart + rangeSize;
+			let range = "" + rangeStart + "-" + rangeEnd;
+			let jsonContent = null;
+			const userAction = async (range) => 
+			{
+				const response = await fetch('http://127.0.0.1:3000/news_articles?range=' + range);
+				jsonContent = await response.json(); //extract JSON from the http response
+			}
+			document.getElementById("prev").onclick = prevFunc;
+			document.getElementById("next").onclick = nextFunc;
+			
+			function nextFunc()
+			{
+				rangeStart = rangeStart + rangeSize;
+				rangeEnd = rangeEnd + rangeSize;
+				range = ""+rangeStart + "-" + rangeEnd;
+				userAction(range).then(refreshContent);
+			}
+			
+			function prevFunc()
+			{
+				if (rangeStart > 0) {
+					rangeStart = rangeStart - rangeSize;
+					rangeEnd = rangeEnd - rangeSize;
+					range = "" + rangeStart + "-" + rangeEnd;
+					userAction(range).then(refreshContent);
+				}
+				
+			}
+			
+			function refreshContent()
+			{
+				let content = document.getElementById("news-list");
+				let newsHtml = "";
+				jsonContent.forEach((news) =>
+					{
+						newsHtml = newsHtml + "<h2>"+news.title+"</h2><p>"+news.body+"</p>";
+					}
+				)
+				content.innerHTML = newsHtml;
+			}
+			userAction(range).then(refreshContent);
+		</script>
+	</body>
+</html>
