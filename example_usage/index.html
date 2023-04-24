@@ -53,7 +53,12 @@
 				let newsHtml = "";
 				jsonContent.forEach((news) =>
 					{
-						newsHtml = newsHtml + "<h2>"+news.title+"</h2><p>"+news.body+"</p>";
+						if (news.image_id === null) {
+							newsHtml = newsHtml + "<h2>"+news.title+"</h2><p>"+news.body+"</p>";
+						} else
+						{
+							newsHtml = newsHtml + "<h2>"+news.title+"</h2><img src=\"http://127.0.0.1:3000/images/"+news.image_id+"\"/><p>"+news.body+"</p>";
+						}
 					}
 				)
 				content.innerHTML = newsHtml;
