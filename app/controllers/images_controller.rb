@@ -3,7 +3,7 @@ class ImagesController < ApplicationController
   # GET /news_articles/1
   def show
     if @image != nil
-      send_data @image[:data], :disposition => 'attachment'
+      send_data @image[:data], :type=>@image[:image_type], :filename => @image[:name]+".jpg", :disposition => 'attachment'
     else
       render nothing: true, status: 404
     end
